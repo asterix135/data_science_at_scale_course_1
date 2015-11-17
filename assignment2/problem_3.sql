@@ -13,7 +13,8 @@ SELECT SUM(A.count * B.count)
 
 # Last question
 
-SELECT SUM(a.count * B.count)
+# Nope - but start here
+SELECT A.docid, SUM(a.count * B.count) AS sim_val
     FROM Frequency A,
         (SELECT * FROM Frequency
          UNION
@@ -21,8 +22,36 @@ SELECT SUM(a.count * B.count)
          UNION
          SELECT 'q' AS docid, 'taxes' AS term, 1 AS count
          UNION
-         SELECT 'q' as docid, 'treasury' AS term, 1 AS count) B,
+         SELECT 'q' as docid, 'treasury' AS term, 1 AS count) B
     WHERE A.term = B.term
-    GROUP BY docid
+    ORDER BY sim_val DESC LIMIT 1;
+
+
+# This one works
+
+SELECT A.docid, B.docid, SUM(A.count * B.count) as new_val
+    FROM (
+             SELECT * FROM Frequency
+             UNION
+             SELECT 'q' AS docid, 'washington' as term, 1 AS count
+             UNION
+             SELECT 'q' AS docid, 'taxes' AS term, 1 AS count
+             UNION
+             SELECT 'q' as docid, 'treasury' AS term, 1 AS count
+          ) A,
+          (
+             SELECT * FROM Frequency
+             UNION
+             SELECT 'q' AS docid, 'washington' as term, 1 AS count
+             UNION
+             SELECT 'q' AS docid, 'taxes' AS term, 1 AS count
+             UNION
+             SELECT 'q' as docid, 'treasury' AS term, 1 AS count
+           ) B
+    WHERE A.term = B.term
+        AND B.docid = 'q'
+    GROUP BY A.docid, B.docid
+    ORDER BY new_val DESC LIMIT 1;
+
 
 
