@@ -56,3 +56,11 @@ SELECT COUNT(DISTINCT(docid)) FROM
             GROUP BY docid
             HAVING COUNT(count) > 300);
 
+# part f
+
+SELECT COUNT(DISTINCT(A.docid)) FROM
+    Frequency A, Frequency B
+    WHERE A.docid = B.docid
+        AND A.term = 'transactions'
+        AND B.term = 'world';
+
