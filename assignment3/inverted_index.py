@@ -37,7 +37,7 @@ def mapper(record):
 
 def reducer(key, list_of_values):
     # key: word
-    # value: list of occurrence counts
+    # value: list of occurrences
     doc_set = set([])
     for v in list_of_values:
       doc_set.add(v)

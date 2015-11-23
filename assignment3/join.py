@@ -50,22 +50,23 @@ mr = MapReduce.MapReduce()
 # =============================
 # Do not modify above this line
 
+
 def mapper(record):
-    # key: document identifier
-    # value: document contents
-    key = record[0]
-    value = record[1]
-    words = value.split()
-    for w in words:
-      mr.emit_intermediate(w, 1)
+    # key: tuple of table & order_id
+    # value: entire record
+    key = record[1]
+    mr.emit_intermediate(key, record)
+
 
 def reducer(key, list_of_values):
-    # key: word
-    # value: list of occurrence counts
-    total = 0
+    # key: tuple of table & order_id
+    # value: merged list of all fields
     for v in list_of_values:
-      total += v
-    mr.emit((key, total))
+        if v[0] == 'order':
+            for w in list_of_values:
+                if w[0] == 'line_item':
+                    mr.emit(v + w)
+
 
 # Do not modify below this line
 # =============================
