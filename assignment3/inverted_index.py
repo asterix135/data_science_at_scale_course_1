@@ -41,7 +41,7 @@ def reducer(key, list_of_values):
     doc_set = set([])
     for v in list_of_values:
       doc_set.add(v)
-    mr.emit((key, doc_set))
+    mr.emit((key, list(doc_set)))
 
 # Do not modify below this line
 # =============================
