@@ -1,5 +1,4 @@
-datasci_course_materials
+Data Science At Scale Coursera
 ========================
 
-Public repository for course materials for the Data Science at Scale specialization offered by Coursera and the University of Washington.
-
+My working/class files for U Washington/Coursera course - Data Science at Scale
