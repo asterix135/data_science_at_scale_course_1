@@ -25,6 +25,8 @@ def test_friends():
 
 def test_asymmetric():
     inputdata = open('data/friends.json')
+    # inputdata = open('test_friends.json')
+
     af.mr.execute(inputdata, af.mapper, af.reducer)
 
 

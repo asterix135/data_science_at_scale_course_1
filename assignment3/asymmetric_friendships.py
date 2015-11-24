@@ -37,8 +37,7 @@ mr = MapReduce.MapReduce()
 def mapper(record):
     # key: personA
     # value: personB
-    key = record[0]
-    person_a = key
+    person_a = record[0]
     person_b = record[1]
     mr.emit_intermediate(person_a, (person_a, person_b))
     mr.emit_intermediate(person_b, (person_a, person_b))
@@ -54,7 +53,10 @@ def reducer(key, list_of_values):
                     list_of_values.remove((v[0], v[1]))
                     list_of_values.remove((v[1], v[0]))
     for v in list_of_values:
-        mr.emit(v)
+        if v[0] == key:
+            mr.emit(v)
+        else:
+            mr.emit((v[1], v[0]))
 
 
 # Do not modify below this line
