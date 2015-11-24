@@ -24,6 +24,8 @@ $ python asymmetric_friendships.py friends.json
 
 You can verify your solution by comparing your result with the file
 asymmetric_friendships.json.
+
+Note that the grader requires both (friend, person) and (person, friend)
 """
 
 mr = MapReduce.MapReduce()
@@ -36,17 +38,23 @@ def mapper(record):
     # key: personA
     # value: personB
     key = record[0]
-    # value = record[1]
-    mr.emit_intermediate(key, 1)
+    person_a = key
+    person_b = record[1]
+    mr.emit_intermediate(person_a, (person_a, person_b))
+    mr.emit_intermediate(person_b, (person_a, person_b))
 
 
 def reducer(key, list_of_values):
     # key: word
     # value: list of occurrence counts
-    total = 0
     for v in list_of_values:
-        total += v
-    mr.emit((key, total))
+        if v[0] == key:
+            for w in list_of_values:
+                if w[0] == v[1]:
+                    list_of_values.remove((v[0], v[1]))
+                    list_of_values.remove((v[1], v[0]))
+    for v in list_of_values:
+        mr.emit(v)
 
 
 # Do not modify below this line
