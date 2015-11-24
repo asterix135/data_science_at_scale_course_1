@@ -6,6 +6,7 @@ import inverted_index as ii
 import join
 import friends
 import asymmetric_friendships as af
+import unique_trims as ut
 
 
 def test_inverted_index():
@@ -26,15 +27,21 @@ def test_friends():
 def test_asymmetric():
     inputdata = open('data/friends.json')
     # inputdata = open('test_friends.json')
-
     af.mr.execute(inputdata, af.mapper, af.reducer)
+
+
+def test_unique_trims():
+    inputdata = open('data/dna.json')
+    ut.mr.execute(inputdata, ut.mapper, ut.reducer)
 
 
 def test_master():
     # test_inverted_index()
     # test_join()
     # test_friends()
-    test_asymmetric()
+    # test_asymmetric()
+    test_unique_trims()
+
 
 if __name__ == '__main__':
     test_master()
