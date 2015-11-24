@@ -2,9 +2,9 @@ import MapReduce
 import sys
 
 """
-Consider a simple social network dataset consisting of a set of key-value pairs
-(person, friend) representing a friend relationship between two people. Describe
-a MapReduce algorithm to count the number of friends for each person.
+The relationship "friend" is often symmetric, meaning that if I am your friend,
+you are my friend. Implement a MapReduce algorithm to check whether this
+property holds. Generate a list of all non-symmetric friend relationships.
 
 Map Input
 
@@ -15,16 +15,15 @@ that the personA is a friend of personB.
 
 Reduce Output
 
-The output should be a pair (person, friend_count) where person is a string and
-friend_count is an integer indicating the number of friends associated with
-person.
+The output should be all pairs (friend, person) such that (person, friend)
+appears in the dataset but (friend, person) does not.
 
 You can test your solution to this problem using friends.json:
 
-$ python friend_count.py friends.json
+$ python asymmetric_friendships.py friends.json
 
 You can verify your solution by comparing your result with the file
-friend_count.json.
+asymmetric_friendships.json.
 """
 
 mr = MapReduce.MapReduce()
