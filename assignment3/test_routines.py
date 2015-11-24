@@ -7,6 +7,7 @@ import join
 import friends
 import asymmetric_friendships as af
 import unique_trims as ut
+import multiply
 
 
 def test_inverted_index():
@@ -35,12 +36,18 @@ def test_unique_trims():
     ut.mr.execute(inputdata, ut.mapper, ut.reducer)
 
 
+def test_multiply():
+    inputdata = open('data/matrix.json')
+    multiply.mr.execute(inputdata, multiply.mapper, multiply.reducer)
+
+
 def test_master():
     # test_inverted_index()
     # test_join()
     # test_friends()
     # test_asymmetric()
-    test_unique_trims()
+    # test_unique_trims()
+    test_multiply()
 
 
 if __name__ == '__main__':

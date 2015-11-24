@@ -38,21 +38,22 @@ mr = MapReduce.MapReduce()
 
 def mapper(record):
     """
+    Matrix size has to be hard-coded @ 5x5 for both for this to work
     A has dimensions L,M
     B has dimensions M,N
     for each element (i,j) of A, emit ((i,k),A[i,j] for k in 1 .. N
     for each element (j,k) of B, emit ((i,k),B[j,k] for i in 1 .. L
-
-    note that ouput has to be sent to more than one reducer
     :param record:
     :return:
     """
     # key: personA
     # value: personB
-    person_a = record[0]
-    person_b = record[1]
-    mr.emit_intermediate(person_a, (person_a, person_b))
-    mr.emit_intermediate(person_b, (person_a, person_b))
+    for idx in range(5):
+        if record[0] == 'a':
+            mr.emit_intermediate((record[1], idx), record)
+        else:
+            mr.emit_intermediate((idx, record[2]), record)
+
 
 
 def reducer(key, list_of_values):
@@ -67,17 +68,16 @@ def reducer(key, list_of_values):
     """
     # key: word
     # value: list of occurrence counts
-    for v in list_of_values:
-        if v[0] == key:
-            for w in list_of_values:
-                if w[0] == v[1]:
-                    list_of_values.remove((v[0], v[1]))
-                    list_of_values.remove((v[1], v[0]))
-    for v in list_of_values:
-        if v[0] == key:
-            mr.emit(v)
-        else:
-            mr.emit((v[1], v[0]))
+    cell_total = 0
+    for i in range(5):
+        mult1, mult2 = 0, 0
+        for v in list_of_values:
+            if v[0] == 'a' and v[2] == i:
+                mult1 = v[3]
+            elif v[0] == 'b' and v[1] == i:
+                mult2 = v[3]
+        cell_total += mult1 * mult2
+    mr.emit((key[0], key[1], cell_total))
 
 
 # Do not modify below this line
